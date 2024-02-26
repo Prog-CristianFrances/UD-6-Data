@@ -208,10 +208,10 @@ public class Data {
 	public int getNumeroSetmana() {
             int nSemana=0;
             int diaAño=getDiesTranscorregutsOrigen()-getDiesTranscorregutsEnAny()+1;
-            
+                        
             while(!DIES_TEXT[diaAño%7].equals("dilluns")){
                 diaAño++;
-                if(DIES_TEXT[diaAño%7].equals("dilluns")){
+                if(DIES_TEXT[diaAño%7].equals("dilluns") || getDiesTranscorregutsEnAny()<7 ){
                     nSemana++;
                 }
             }
@@ -220,6 +220,7 @@ public class Data {
                 diaAño+=7;
                 nSemana++;
             }
+            
             return nSemana;
 	}
 
@@ -232,7 +233,37 @@ public class Data {
 	 * @return boolean
 	 */
 	public Data afegir(int numDias){
-		return null;
+            int numeroDia=dia;
+            int contador=1;
+            int mes=this.mes;
+            int año=any;
+            
+            if(numDias>0 && numDias<=30){
+                
+                while(numDias+dia-contador==getDiesMes(mes, this.any)){
+                    
+                        if(numDias+dia-contador==getDiesMes(mes, this.any) && mes==12){
+                             numeroDia=numDias+dia-getDiesMes(mes, this.any);
+                            año++;
+                            mes=1;
+                        }else{
+                             numeroDia=numDias+dia-getDiesMes(mes, this.any);
+                            mes++;
+                        }
+                    contador++;
+                }
+                
+                if (numDias<=getDiesMes(mes, this.any)-dia){
+                        numeroDia=numeroDia+numDias;
+                    }
+                
+                Data resultado= new Data(numeroDia,mes, año);
+                return resultado;
+          
+            }else{
+                System.out.println("Solo se puede aumentar un máximo de 30 días y un mínimo de 1");
+            }
+            return null;
 	}
 
 	/**

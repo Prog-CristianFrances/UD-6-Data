@@ -10,13 +10,13 @@ package prog.cipfpbatoi;
  */
 public class TestData {
     public static void main(String[] args){
-        Data data=new Data(16,03,2024);
+        Data data=new Data(1,12,2024);
         Data data1=new Data(28,03,2055);
         Data data2=new Data("01/12/2005");
         Data data3=new Data();
         
          
-        System.out.println(data.getNumeroSetmana());
+        data.afegir(16).mostrarEnFormatES();
         System.out.println("");
     }
 }
