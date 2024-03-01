@@ -179,7 +179,6 @@ public class Data {
 	 */
 	public String getDiaSetmana() {
             return DIES_TEXT[getDiesTranscorregutsOrigen()%7];
-		
 	}
 
 	/**
@@ -296,7 +295,11 @@ public class Data {
          */
 	public boolean isCorrecta(){
             if(dia<=getDiesMes(mes, any)){
-                return true;
+                if(mes<=12 && mes >0){
+                    if(any>0 && any <9999){
+                        return true;
+                    }
+                }
             }
 		return false;
 	}
@@ -317,15 +320,15 @@ public class Data {
 	private int getDiesTranscorregutsOrigen() {
             int nDias=0;
             
-            for(int año=1;año<=this.any-1;año++){
+            for(int año=1;año<this.any;año++){
                 nDias=nDias+getDiesAny(año);
             }
             
-            for(int mes=1;mes<=this.mes-1;mes++){
+            for(int mes=1;mes<this.mes;mes++){
                 nDias=nDias+getDiesMes(mes,any);
             }
             
-            nDias += dia;
+            nDias=nDias+dia;
             
             return nDias;
 	}
@@ -353,7 +356,14 @@ public class Data {
 	 * @return boolean
 	 */
 	public static boolean isBisiesto(int anyo){
-            return anyo%4==0 && anyo%100!=0 || anyo%400==0;
+            if(anyo%4==0 && anyo%100!=0){
+                return true;
+            }else if(anyo%4==0 && anyo%100==0 && anyo%400==0){
+                return true;
+
+            }
+            return false;
+            
 	}
 
 	/**
@@ -365,6 +375,7 @@ public class Data {
 	public static int getDiesMes (int mes, int anyo) {
             switch(mes){
                 case 1:
+                case 3:
                 case 5:
                 case 7:
                 case 8:
