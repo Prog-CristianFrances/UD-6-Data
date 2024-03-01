@@ -59,10 +59,7 @@ public class Data {
                         if(Integer.parseInt(aux)<=31){
                             this.dia=Integer.parseInt(aux);
                         }else{
-                            dia=1;
-                            mes=1;
-                            any=1970;
-                            contador=5;
+                            contador=4;
                         }
                         contador++;
                         break;
@@ -70,10 +67,7 @@ public class Data {
                         if(Integer.parseInt(aux)<=12){
                             this.mes=Integer.parseInt(aux);
                         }else{
-                            dia=1;
-                            mes=1;
-                            any=1970;
-                            contador=5;
+                            contador=4;
                         }
                         contador++;
                         break;
@@ -81,12 +75,8 @@ public class Data {
                         if(Integer.parseInt(aux)<=9999 && Integer.parseInt(aux)>=0){
                             this.any=Integer.parseInt(aux);
                         }else{
-                            dia=1;
-                            mes=1;
-                            any=1970;
-                            contador=5;
+                            contador=4;
                         }
-                        contador++;
                         break;
                     default:
                         dia=1;
@@ -95,7 +85,13 @@ public class Data {
                         break;
                 }
             }while(st.hasMoreTokens());
-	}
+
+            if(contador==4){
+                dia=1;
+                mes=1;
+                any=1970;
+            }
+        }
 
 	/**
 	 * Modifica la fecha actual a partir de los datos pasados como argumento
@@ -234,29 +230,21 @@ public class Data {
 	 */
 	public Data afegir(int numDias){
             int numeroDia=dia;
-            int contador=1;
             int mes=this.mes;
             int año=any;
             
             if(numDias>0 && numDias<=30){
-                
-                while(numDias+dia-contador==getDiesMes(mes, this.any)){
-                    
-                        if(numDias+dia-contador==getDiesMes(mes, this.any) && mes==12){
-                             numeroDia=numDias+dia-getDiesMes(mes, this.any);
-                            año++;
-                            mes=1;
-                        }else{
-                             numeroDia=numDias+dia-getDiesMes(mes, this.any);
-                            mes++;
-                        }
-                    contador++;
+                if(numDias+numeroDia>=getDiesMes(mes, año)){
+                    numeroDia=numeroDia+numDias-getDiesMes(mes, año);
+                    mes++;
+                    if(mes==13){
+                        año++;
+                        mes=1;
+                    }    
+                }else{
+                    numeroDia+=numDias;
                 }
-                
-                if (numDias<=getDiesMes(mes, this.any)-dia){
-                        numeroDia=numeroDia+numDias;
-                    }
-                
+                    
                 Data resultado= new Data(numeroDia,mes, año);
                 return resultado;
           
@@ -274,7 +262,31 @@ public class Data {
 	 * @return boolean
 	 */
 	public Data restar(int numDias){
-		return null;
+            int numeroDia=dia;
+            int mes=this.mes;
+            int año=any;
+            
+            if(numDias>0 && numDias<=30){
+                if(numeroDia-numDias<=0){
+                    mes--;
+                    numeroDia=getDiesMes(mes, año)-numDias+numeroDia;
+                    
+                    if(mes==0){
+                        año--;
+                        numeroDia++;
+                        mes=12;
+                    }    
+                }else{
+                    numeroDia-=numDias;
+                }
+                    
+                Data resultado= new Data(numeroDia,mes, año);
+                return resultado;
+          
+            }else{
+                System.out.println("Solo se puede disminuir un máximo de 30 días y un mínimo de 1");
+            }
+            return null;
 	}
 
         /**
@@ -283,6 +295,9 @@ public class Data {
          * @return 
          */
 	public boolean isCorrecta(){
+            if(dia<=getDiesMes(mes, any)){
+                return true;
+            }
 		return false;
 	}
 
