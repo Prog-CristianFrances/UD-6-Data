@@ -139,7 +139,7 @@ public class Data {
 	 * Muestra por pantalla la fecha en formato español dd-mm-yyyy
 	 */
 	public void mostrarEnFormatES()  {
-            System.out.printf("%s-%s-%s",dia,mes,any);
+            System.out.printf("%02d-%02d-%04d",dia,mes,any);
             System.out.println("");
 	}
 
@@ -147,7 +147,7 @@ public class Data {
 	 * Muestra por pantalla la fecha en formato inglés yyyy-mm-dd
 	 */
 	public void mostrarEnFormatGB() {
-            System.out.printf("%s-%s-%s",any,mes,dia);
+            System.out.printf("%04d-%02d-%02d",any,mes,dia);
             System.out.println("");
 	}
 
@@ -156,7 +156,7 @@ public class Data {
 	 * Ej. 1 enero de 1970
 	 */
 	public void mostrarEnFormatText() {
-            System.out.printf("%s-%s-%s",dia,getMesEnFormatText(),any);
+            System.out.printf("%02d-%s-%04d",dia,getMesEnFormatText(),any);
             System.out.println("");
         }
 	/**
@@ -228,30 +228,32 @@ public class Data {
 	 * @return boolean
 	 */
 	public Data afegir(int numDias){
-            int numeroDia=dia;
-            int mes=this.mes;
-            int año=any;
-            
-            if(numDias>0 && numDias<=30){
-                if(numDias+numeroDia>=getDiesMes(mes, año)){
-                    numeroDia=numeroDia+numDias-getDiesMes(mes, año);
+            int numeroDia = dia;
+            int mes = this.mes;
+            int año = any;
+
+            if (numDias > 0 && numDias <= 30) {
+                int diasEnEsteMes = getDiesMes(mes, año);
+                while (numDias + numeroDia > diasEnEsteMes) {
+                    numDias -= (diasEnEsteMes - numeroDia + 1);
+                    numeroDia = 1;
                     mes++;
-                    if(mes==13){
+                    if (mes == 13) {
                         año++;
-                        mes=1;
-                    }    
-                }else{
-                    numeroDia+=numDias;
+                        mes = 1;
+                    }
+                    diasEnEsteMes = getDiesMes(mes, año);
                 }
-                    
-                Data resultado= new Data(numeroDia,mes, año);
+                numeroDia += numDias;
+
+                Data resultado = new Data(numeroDia, mes, año);
                 return resultado;
-          
+
             }else{
                 System.out.println("Solo se puede aumentar un máximo de 30 días y un mínimo de 1");
             }
             return null;
-	}
+        }
 
 	/**
 	 * Retorna un nou objecte de tipus data que representa la data resultant de restar el nombre de dies passats com a argument a la data que representa l'objecte actual. 
@@ -261,32 +263,31 @@ public class Data {
 	 * @return boolean
 	 */
 	public Data restar(int numDias){
-            int numeroDia=dia;
-            int mes=this.mes;
-            int año=any;
-            
-            if(numDias>0 && numDias<=30){
-                if(numeroDia-numDias<=0){
-                    mes--;
-                    numeroDia=getDiesMes(mes, año)-numDias+numeroDia;
-                    
-                    if(mes==0){
+            int numeroDia = dia;
+            int mes = this.mes;
+            int año = any;
+
+            if (numDias > 0 && numDias <= 30) {
+                while (numDias >= numeroDia) {
+                    numDias -= numeroDia;
+                    if (mes == 1) {
+                        mes = 12;
                         año--;
-                        numeroDia++;
-                        mes=12;
-                    }    
-                }else{
-                    numeroDia-=numDias;
-                }
-                    
-                Data resultado= new Data(numeroDia,mes, año);
+                    }else{
+                        mes--;
+                    }
+                numeroDia = getDiesMes(mes, año);
+            }
+                numeroDia -= numDias;
+            
+                Data resultado = new Data(numeroDia, mes, año);
                 return resultado;
-          
+
             }else{
                 System.out.println("Solo se puede disminuir un máximo de 30 días y un mínimo de 1");
             }
             return null;
-	}
+        }
 
         /**
          * Retorna un booleà indicant si la data representada per l'objecte actual és correcta. 

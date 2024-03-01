@@ -130,5 +130,21 @@ public class TestData {
         
         System.out.println("=== FI - Prova del mètode modificador - FI === ");
         
+        
+        
+        
+        
+        
+        
+        
+        
+        System.out.println("--- Dia anterior de la data inicial (16-1-2021) - (-1 dia) ---");
+        Data data=new Data(2,3,2022);
+        data=data.restar(30);
+        data.mostrarEnFormatES();
+        
+        
+        System.out.println(" ");
+        System.out.println(" ");
     }
 }
